@@ -7,16 +7,16 @@ var globalResult float64
 func doCalculate(num float64, operator string) float64 {
 	switch operator {
 	case "+":
-		globalResult = globalResult + num
+		globalResult += num
 		return globalResult
 	case "-":
-		globalResult = globalResult - num
+		globalResult -= num
 		return globalResult
 	case "*":
-		globalResult = globalResult * num
+		globalResult *= num
 		return globalResult
 	case "/":
-		globalResult = globalResult / num
+		globalResult /= num
 		return globalResult
 	default:
 		return 0
