@@ -2,24 +2,28 @@ package main
 
 import "fmt"
 
-var result float64
+var globalResult float64
 
 func doCalculate(num float64, operator string) float64 {
 	switch operator {
 	case "+":
-		return result + num
+		globalResult = globalResult + num
+		return globalResult
 	case "-":
-		return result - num
+		globalResult = globalResult - num
+		return globalResult
 	case "*":
-		return result * num
+		globalResult = globalResult * num
+		return globalResult
 	case "/":
-		return result / num
+		globalResult = globalResult / num
+		return globalResult
 	default:
 		return 0
 	}
 }
 func main() {
-	//var result float64
+	var result float64
 	result = doCalculate(100, "+")
 	fmt.Println(result)
 	result = doCalculate(50, "-")
