@@ -20,7 +20,12 @@ func init() {
 }
 
 func addItem(k, v string) {
+	if _, ok := data[k]; ok {
+		fmt.Println("duplicate key")
+		return
+	}
 	data[k] = v
+	fmt.Println("item added")
 }
 
 func updateItem(k, v string) {
@@ -28,7 +33,12 @@ func updateItem(k, v string) {
 }
 
 func getById(k string) string {
-	return data[k]
+	if _, ok := data[k]; ok {
+		fmt.Println("item found")
+		return data[k]
+	}
+	fmt.Println("item not found")
+	return ""
 }
 
 func getAll() map[string]string {
