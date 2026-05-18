@@ -29,6 +29,10 @@ func addItem(k, v string) {
 }
 
 func updateItem(k, v string) {
+	if _, ok := data[k]; !ok {
+		fmt.Println("key not found")
+		return
+	}
 	data[k] = v
 }
 
