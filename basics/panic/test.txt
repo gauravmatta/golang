@@ -1,0 +1,1 @@
+This is a sample text file used for testing purposes. It contains multiple lines of text to simulate a typical file that might be read or processed by a program. The content is simple and does not contain any special characters or formatting, making it ideal for basic file handling tests.

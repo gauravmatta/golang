@@ -2,17 +2,14 @@ package main
 
 import "fmt"
 
-func Add(x, y int) int {
-	return x + y
-}
-
-func Subtract(x, y int) int {
-	return x - y
-}
-
 func main() {
-	x, y := 20, 10
-	fmt.Println(x, y)
-	fmt.Println(Add(x, y))
-	fmt.Println(Subtract(x, y))
+
+	x, y := "Gaurav", "Matta"
+	fmt.Println("Before Swap", x, y)
+	x, y = Swap(x, y)
+	fmt.Println("After Swap", x, y)
+}
+
+func Swap(x, y string) (string, string) {
+	return y, x
 }
