@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 
+	"store/services/memstore"
 	store "store/services/memstore"
 )
 
@@ -11,7 +12,7 @@ func main() {
 		fmt.Println("Error putting value:", err)
 		return
 	}
-	if val, err := store.Get("one"); err != nil {
+	if val, err := memstore.Get("one"); err != nil {
 		fmt.Println("Error getting value:", err)
 		return
 	} else {
