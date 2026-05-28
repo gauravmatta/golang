@@ -48,7 +48,7 @@ func main() {
 	p2.PrintName()
 	p2.PrintDetails()
 
-	// The new built in function allocates memory
+	// The new built-in function allocates memory
 	// The value returned is a pointer to newly allocated type.
 	p3 := new(Person)
 	p3.FirstName = "Jakarta"
