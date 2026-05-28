@@ -50,4 +50,5 @@ func main() {
 	d.Skills = []string{"Go", "Docker"}
 	d.PrintName()
 	d.PrintDetails()
+	d.PrintSkills()
 }
