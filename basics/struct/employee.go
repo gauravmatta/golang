@@ -41,6 +41,7 @@ func main() {
 	}
 	steve.PrintName()
 	steve.PrintDetails()
+	steve.PrintSkills()
 
 	var d Developer
 	d.Employee = Employee{
