@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+	store "collection/memstore"
+)
 
 var data map[string]string
 
@@ -13,6 +17,18 @@ func main() {
 	fmt.Println(getById("name"))
 	deleteItem("age")
 	fmt.Println(getAll())
+
+	// Using External store library
+	fmt.Println("Using External store library")
+	store.AddItem("country", "India")
+	store.AddItem("language", "Go")
+	store.AddItem("framework", "Gin")
+	fmt.Println(store.GetAll())
+	store.UpdateItem("language", "Golang")
+	fmt.Println(store.GetAll())
+	fmt.Println(store.GetById("language"))
+	store.DeleteItem("framework")
+	fmt.Println(store.GetAll())
 }
 
 func init() {
