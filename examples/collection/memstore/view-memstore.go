@@ -1,12 +1,21 @@
 package memstore
 
-func GetById(k string) string {
-	if _, ok := data[k]; ok {
-		return data[k]
+import "errors"
+
+func GetById(k string) (string, error) {
+	if v, ok := data[k]; ok {
+		return v, nil
 	}
-	return ""
+	return "", errors.New("key not found")
 }
 
-func GetAll() map[string]string {
-	return data
+func GetAll() ([]string, error) {
+	if len(data) == 0 {
+		return nil, errors.New("data store is empty")
+	}
+	values := make([]string, 0)
+	for k, v := range data {
+		values = append(values, k+"=>"+v)
+	}
+	return values, nil
 }

@@ -20,15 +20,41 @@ func main() {
 
 	// Using External store library
 	fmt.Println("Using External store library")
-	store.AddItem("country", "India")
-	store.AddItem("language", "Go")
-	store.AddItem("framework", "Gin")
-	fmt.Println(store.GetAll())
-	store.UpdateItem("language", "Golang")
-	fmt.Println(store.GetAll())
-	fmt.Println(store.GetById("language"))
-	store.DeleteItem("framework")
-	fmt.Println(store.GetAll())
+	if err := store.AddItem("country", "India"); err != nil {
+		fmt.Println(err)
+	}
+	if err := store.AddItem("language", "Go"); err != nil {
+		fmt.Println(err)
+	}
+	if err := store.AddItem("framework", "Gin"); err != nil {
+		fmt.Println(err)
+	}
+	if sl, err := store.GetAll(); err == nil {
+		fmt.Println(sl)
+	} else {
+		fmt.Println(err)
+	}
+	if err := store.UpdateItem("language", "Golang"); err != nil {
+		fmt.Println(err)
+	}
+	if sl, err := store.GetAll(); err == nil {
+		fmt.Println(sl)
+	} else {
+		fmt.Println(err)
+	}
+	if val, err := store.GetById("language"); err == nil {
+		fmt.Println(val)
+	} else {
+		fmt.Println(err)
+	}
+	if err := store.DeleteItem("framework"); err != nil {
+		fmt.Println(err)
+	}
+	if sl, err := store.GetAll(); err == nil {
+		fmt.Println(sl)
+	} else {
+		fmt.Println(err)
+	}
 }
 
 func init() {
