@@ -37,4 +37,7 @@ func main() {
 	p.ChangeLocation("Santa Clara") // pass by reference
 	p.PrintName()
 	p.PrintDetails()
+
+	p1 := new(Worker)
+	p1.PrintDetails()
 }
