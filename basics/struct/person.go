@@ -12,6 +12,12 @@ type Person struct {
 	Email, Location string
 }
 
+type Number int
+
+func (n Number) String() string {
+	return fmt.Sprintf("%d", n)
+}
+
 func (p Person) PrintName() {
 	fmt.Printf("\nName: %s %s\n", p.FirstName, p.LastName)
 }
@@ -21,6 +27,10 @@ func (p Person) PrintDetails() {
 }
 
 func main() {
+
+	n := Number(42)
+	fmt.Printf("Number: %s\n", n.String())
+
 	var person Person
 	person.FirstName = "John"
 	person.LastName = "Doe"
