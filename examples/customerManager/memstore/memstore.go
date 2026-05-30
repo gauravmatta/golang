@@ -11,16 +11,25 @@ type CustomerRepository struct {
 }
 
 func (m *CustomerRepository) Create(customer domain.Customer) error {
+	if _, ok := m.customers[customer.ID]; ok {
+		return fmt.Errorf("customer with id %s already exists", customer.ID)
+	}
 	m.customers[customer.ID] = customer
 	return nil
 }
 
 func (m *CustomerRepository) Update(id string, customer domain.Customer) error {
+	if _, ok := m.customers[id]; !ok {
+		return fmt.Errorf("customer with id %s does not exist", id)
+	}
 	m.customers[id] = customer
 	return nil
 }
 
 func (m *CustomerRepository) Delete(id string) error {
+	if _, ok := m.customers[id]; !ok {
+		return fmt.Errorf("customer with id %s does not exist", id)
+	}
 	delete(m.customers, id)
 	return nil
 }
