@@ -1,0 +1,123 @@
+package main
+
+import (
+	"customerManager/domain"
+	"customerManager/memstore"
+	"fmt"
+)
+
+type CustomerController struct {
+	repository domain.CustomerRepository
+}
+
+func (cc CustomerController) Create(customer domain.Customer) error {
+	err := cc.repository.Create(customer)
+	if err != nil {
+		return err
+	}
+	fmt.Printf("Customer %s has been created\n", customer)
+	return nil
+}
+
+func (cc CustomerController) Update(id string, customer domain.Customer) error {
+	err := cc.repository.Update(id, customer)
+	if err != nil {
+		return err
+	}
+	fmt.Printf("Customer %s has been updated\n", customer)
+	return nil
+}
+
+func (cc CustomerController) Delete(id string) error {
+	err := cc.repository.Delete(id)
+	if err != nil {
+		return err
+	}
+	fmt.Printf("Customer %s has been deleted\n", id)
+	return nil
+}
+
+func (cc CustomerController) FindById(id string) (domain.Customer, error) {
+	customer, err := cc.repository.FindById(id)
+	if err != nil {
+		return domain.Customer{}, err
+	}
+	return customer, nil
+}
+
+func (cc CustomerController) FindAll() ([]domain.Customer, error) {
+	customers, err := cc.repository.FindAll()
+	if err != nil {
+		return []domain.Customer{}, err
+	}
+	return customers, nil
+}
+
+func main() {
+	controller := CustomerController{
+		repository: memstore.NewCustomerRepository(),
+	}
+	customer1 := domain.Customer{
+		ID:    "cust01",
+		Name:  "Rahul",
+		Email: "rahul@gmail.com",
+	}
+	err := controller.Create(customer1)
+	if err != nil {
+		fmt.Println("Error creating customer:", err)
+	}
+	customers, err := controller.FindAll()
+	if err != nil {
+		fmt.Println("Error getting customers:", err)
+	} else {
+		fmt.Println("Found customers:", customers)
+	}
+	customer2 := domain.Customer{
+		ID:    "cust02",
+		Name:  "Mohit",
+		Email: "mohit@gmail.com",
+	}
+	err = controller.Create(customer2)
+	if err != nil {
+		fmt.Println("Error creating customer:", err)
+	}
+	customers, err = controller.FindAll()
+	if err != nil {
+		fmt.Println("Error getting customers:", err)
+	} else {
+		fmt.Println("Found customers:", customers)
+	}
+	customer3 := domain.Customer{
+		ID:    "cust02",
+		Name:  "Manu",
+		Email: "manu@gmail.com",
+	}
+	err = controller.Update("cust02", customer3)
+	if err != nil {
+		fmt.Println("Error updating customer:", err)
+	}
+	customers, err = controller.FindAll()
+	if err != nil {
+		fmt.Println("Error getting customers:", err)
+	} else {
+		fmt.Println("Found customers:", customers)
+	}
+	customer, erf := controller.FindById("cust01")
+	if erf != nil {
+		fmt.Println("Error finding customer:", erf)
+	} else {
+		fmt.Printf("Customer with id 'cust01' was found %s\n", customer)
+	}
+	err = controller.Delete("cust02")
+	if err != nil {
+		fmt.Println("Error deleting customer:", err)
+	} else {
+		fmt.Println("Customer deleted successfully")
+	}
+	customers, err = controller.FindAll()
+	if err != nil {
+		fmt.Println("Error getting customers:", err)
+	} else {
+		fmt.Println("Found customers:", customers)
+	}
+}
