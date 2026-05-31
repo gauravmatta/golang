@@ -11,6 +11,10 @@ func main() {
 	addTable()
 	multiTable()
 	fmt.Println("Terminating program")
+	fmt.Println("Concurrency Call")
+	go addTable()
+	go multiTable()
+	fmt.Println("Terminating Concurrency program")
 }
 
 func addTable() {
