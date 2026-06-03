@@ -15,6 +15,9 @@ func main() {
 		nums <- 40
 		nums <- 50
 	}()
+	nums <- 60
+	nums <- 70
+	nums <- 80
 	v, exists := <-counter
 	fmt.Printf("Counter: %d, exists: %t\n", v, exists)
 	v2, exists2 := <-nums
@@ -24,6 +27,8 @@ func main() {
 	l1 := len(counter)
 	l2 := len(nums)
 	fmt.Printf("Length of counter: %d, Length of nums: %d\n", l1, l2)
+	fmt.Println(<-nums)
+	fmt.Println(<-nums)
 	fmt.Println(<-nums)
 	fmt.Println(<-nums)
 	fmt.Println(<-nums)
