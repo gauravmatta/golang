@@ -16,8 +16,9 @@ var wg1 sync.WaitGroup
 func randomCounterWithChanOper(out chan<- int) {
 	defer wg1.Done()
 	var random int
-	for x := 0; x < 10; x++ {
+	for x := 0; x < 5; x++ {
 		random = rand.Intn(50)
+		fmt.Printf("Generated random value is %d\n", random)
 		out <- random
 	}
 	close(out)
@@ -32,28 +33,34 @@ func generateFibonacciWithChanOper(out chan<- fibvalue1, in <-chan int) {
 		Phi := (1 + math.Sqrt(5)) / 2
 		phi := (1 - math.Sqrt(5)) / 2
 		result := (math.Pow(Phi, input) - math.Pow(phi, input)) / math.Sqrt(5)
+		fmt.Printf("Generating Fibonacci value of %d using For Range is %f\n", v, result)
 		out <- fibvalue1{
 			input: v,
 			value: int(result),
 		}
 	}
 	close(out)
+}
 
-	/*
-			for {
-				v, ok:= <-in
-				if !ok {
-					fmt.Println("Channel was closed")
-					return
-				}
-				// find out fibonacci value using v
-				// Once fibonacci value is generated
-				out <- fibvalue{
-					input: v,
-					value:0, //fibonacci value
-				}
-		  }
-	*/
+func generateFibonacciWithChanOperFor(out chan<- fibvalue1, in <-chan int) {
+	defer wg1.Done()
+	var input float64
+	for {
+		v, ok := <-in
+		if !ok {
+			fmt.Printf("Channel was closed %d\n", v)
+			return
+		}
+		input = float64(v)
+		Phi := (1 + math.Sqrt(5)) / 2
+		phi := (1 - math.Sqrt(5)) / 2
+		result := (math.Pow(Phi, input) - math.Pow(phi, input)) / math.Sqrt(5)
+		fmt.Printf("Generating Fibonacci value of %d using For is %f\n", v, result)
+		out <- fibvalue1{
+			input: v,
+			value: int(result),
+		}
+	}
 }
 
 func printFibonacciWithChanOper(in <-chan fibvalue1) {
@@ -72,6 +79,7 @@ func main() {
 	// Launching 3 goroutines
 	go randomCounterWithChanOper(randoms)
 	go generateFibonacciWithChanOper(fibs, randoms)
+	go generateFibonacciWithChanOperFor(fibs, randoms)
 	go printFibonacciWithChanOper(fibs)
 	// Wait for completing all goroutines
 	wg1.Wait()
