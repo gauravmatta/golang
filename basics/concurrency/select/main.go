@@ -5,6 +5,7 @@ import (
 	"math"
 	"math/rand"
 	"sync"
+	"time"
 )
 
 type fibvalue struct {
@@ -62,6 +63,8 @@ func printValues(fibs <-chan fibvalue, sqrs <-chan squarevalue) {
 				sqrs = nil
 				fmt.Println("Square channel closed")
 			}
+		case <-time.After(500 * time.Millisecond):
+			fmt.Println("No value received in the last 500ms")
 		}
 	}
 }
