@@ -21,14 +21,23 @@ func index(w http.ResponseWriter, r *http.Request) {
         </p>
 	</body>
 </html>`
-	fmt.Fprintf(w, html)
+	_, err := fmt.Fprintf(w, html)
+	if err != nil {
+		return
+	}
 }
 
 func welcome(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Welcome to Go Web Programming")
+	_, err := fmt.Fprintf(w, "Welcome to Go Web Programming")
+	if err != nil {
+		return
+	}
 }
 func message(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "net/http package is used to build web apps")
+	_, err := fmt.Fprintf(w, "net/http package is used to build web apps")
+	if err != nil {
+		return
+	}
 }
 
 func main() {
