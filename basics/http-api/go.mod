@@ -4,6 +4,7 @@ go 1.26
 
 require (
 	github.com/gofrs/uuid v4.4.0+incompatible
+	github.com/rs/cors v1.11.1
 	github.com/stretchr/testify v1.11.1
 )
 

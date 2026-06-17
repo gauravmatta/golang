@@ -75,3 +75,33 @@ func (h *NoteHandler) Get(w http.ResponseWriter, r *http.Request) {
 		w.Write(j)
 	}
 }
+
+func (h *NoteHandler) Put(w http.ResponseWriter, r *http.Request) {
+	// Getting route parameter id
+	id := r.PathValue("id")
+	var note model.Note
+	// Decode the incoming note json
+	err := json.NewDecoder(r.Body).Decode(&note)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// Update
+	if err := h.Repository.Update(id, note); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusNoContent)
+}
+
+// Delete handles HTTP Delete - /api/notes/{id}
+func (h *NoteHandler) Delete(w http.ResponseWriter, r *http.Request) {
+	// Getting route parameter id
+	id := r.PathValue("id")
+	// delete
+	if err := h.Repository.Delete(id); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusNoContent)
+}
