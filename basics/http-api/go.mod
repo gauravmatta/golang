@@ -1,4 +1,4 @@
-module http-api
+module github.com/gauravmatta/golang/basics/http-api
 
 go 1.26
 

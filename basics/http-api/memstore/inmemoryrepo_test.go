@@ -2,9 +2,9 @@ package memstore
 
 import (
 	"errors"
-	"http-api/model"
 	"time"
 
+	"github.com/gauravmatta/golang/basics/http-api/model"
 	"github.com/gofrs/uuid"
 )
 
