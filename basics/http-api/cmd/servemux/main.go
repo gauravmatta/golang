@@ -39,9 +39,6 @@ func main() {
 	}
 	log.Println("Listening...")
 	err = server.ListenAndServe()
-	if err != nil {
-		return
-	} // Run the http server
 }
 
 func initializeRoutes(h *apphttp.NoteHandler) http.Handler {
