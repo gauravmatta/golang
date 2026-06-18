@@ -50,7 +50,10 @@ func (h *NoteHandler) GetAll(w http.ResponseWriter, r *http.Request) {
 		}
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		w.Write(j)
+		_, err = w.Write(j)
+		if err != nil {
+			return
+		}
 	}
 }
 
@@ -72,7 +75,10 @@ func (h *NoteHandler) Get(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 		w.WriteHeader(http.StatusOK)
-		w.Write(j)
+		_, err = w.Write(j)
+		if err != nil {
+			return
+		}
 	}
 }
 

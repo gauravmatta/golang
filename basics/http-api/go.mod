@@ -6,6 +6,7 @@ require (
 	github.com/gofrs/uuid v4.4.0+incompatible
 	github.com/rs/cors v1.11.1
 	github.com/stretchr/testify v1.11.1
+	golang.org/x/time v0.15.0
 )
 
 require (

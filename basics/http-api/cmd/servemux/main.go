@@ -2,13 +2,15 @@ package main
 
 import (
 	"log"
+	"log/slog"
+
 	//"log/slog"
 	"net/http"
 
-	//"github.com/rs/cors"
-
 	apphttp "github.com/gauravmatta/golang/basics/http-api/http/servemux"
 	"github.com/gauravmatta/golang/basics/http-api/memstore"
+	"github.com/gauravmatta/golang/basics/http-api/middleware"
+	"github.com/rs/cors"
 )
 
 //"github.com/gauravmatta/golang/basics/http-api/middleware")
@@ -23,20 +25,23 @@ func main() {
 	}
 	router := initializeRoutes(h) // configure routes
 
-	//logger := slog.Default()
+	logger := slog.Default()
 	//// Adding middleware http
-	//router = middleware.Apply(router,
-	//	middleware.RateLimiter(200),
-	//	middleware.PanicRecovery(logger),
-	//)
+	router = middleware.Apply(router,
+		middleware.RateLimiter(200),
+		middleware.PanicRecovery(logger),
+	)
 	//// CORS middleware
-	//router = cors.Default().Handler(router)
+	router = cors.Default().Handler(router)
 	server := &http.Server{
 		Addr:    ":8080",
 		Handler: router,
 	}
 	log.Println("Listening...")
-	server.ListenAndServe() // Run the http server
+	err = server.ListenAndServe()
+	if err != nil {
+		return
+	} // Run the http server
 }
 
 func initializeRoutes(h *apphttp.NoteHandler) http.Handler {
