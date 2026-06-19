@@ -39,7 +39,6 @@ func (h *CustomerHandler) FindAll(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		w.Header().Set("Content-Type", "application/json")
-		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		_, err = w.Write(marshal)
 		if err != nil {
