@@ -10,6 +10,12 @@ type CustomerRepository struct {
 	customers map[string]domain.Customer
 }
 
+func NewInmemoryRepository() (domain.CustomerRepository, error) {
+	return &CustomerRepository{
+		customers: make(map[string]domain.Customer),
+	}, nil
+}
+
 func (m *CustomerRepository) Create(customer domain.Customer) error {
 	if _, ok := m.customers[customer.ID]; ok {
 		return fmt.Errorf("customer with id %s already exists", customer.ID)

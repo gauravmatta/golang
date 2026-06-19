@@ -1,25 +1,26 @@
 package main
 
 import (
+	"customerManager/controller"
 	"customerManager/domain"
 	"customerManager/memstore"
 	"fmt"
 )
 
 func main() {
-	controller := CustomerController{
-		repository: memstore.NewCustomerRepository(),
+	customerController := controller.CustomerController{
+		Repository: memstore.NewCustomerRepository(),
 	}
 	customer1 := domain.Customer{
 		ID:    "cust01",
 		Name:  "Rahul",
 		Email: "rahul@gmail.com",
 	}
-	err := controller.Create(customer1)
+	err := customerController.Create(customer1)
 	if err != nil {
 		fmt.Println("Error creating customer:", err)
 	}
-	customers, err := controller.FindAll()
+	customers, err := customerController.FindAll()
 	if err != nil {
 		fmt.Println("Error getting customers:", err)
 	} else {
@@ -30,11 +31,11 @@ func main() {
 		Name:  "Mohit",
 		Email: "mohit@gmail.com",
 	}
-	err = controller.Create(customer2)
+	err = customerController.Create(customer2)
 	if err != nil {
 		fmt.Println("Error creating customer:", err)
 	}
-	customers, err = controller.FindAll()
+	customers, err = customerController.FindAll()
 	if err != nil {
 		fmt.Println("Error getting customers:", err)
 	} else {
@@ -45,29 +46,29 @@ func main() {
 		Name:  "Manu",
 		Email: "manu@gmail.com",
 	}
-	err = controller.Update("cust02", customer3)
+	err = customerController.Update("cust02", customer3)
 	if err != nil {
 		fmt.Println("Error updating customer:", err)
 	}
-	customers, err = controller.FindAll()
+	customers, err = customerController.FindAll()
 	if err != nil {
 		fmt.Println("Error getting customers:", err)
 	} else {
 		fmt.Println("Found customers:", customers)
 	}
-	customer, erf := controller.FindById("cust01")
+	customer, erf := customerController.FindById("cust01")
 	if erf != nil {
 		fmt.Println("Error finding customer:", erf)
 	} else {
 		fmt.Printf("Customer with id 'cust01' was found %s\n", customer)
 	}
-	err = controller.Delete("cust02")
+	err = customerController.Delete("cust02")
 	if err != nil {
 		fmt.Println("Error deleting customer:", err)
 	} else {
 		fmt.Println("Customer deleted successfully")
 	}
-	customers, err = controller.FindAll()
+	customers, err = customerController.FindAll()
 	if err != nil {
 		fmt.Println("Error getting customers:", err)
 	} else {
