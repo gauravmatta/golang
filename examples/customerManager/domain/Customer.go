@@ -17,7 +17,7 @@ type CustomerRepository interface {
 }
 
 var (
-	ErrNotFound                = errors.New("no records found")
-	ErrCustomerExists          = errors.New("customer exists")
-	ErrCustomerNotExists error = errors.New("customer doesn't exist")
+	ErrNotFound          = errors.New("no records found")
+	ErrCustomerExists    = errors.New("customer exists")
+	ErrCustomerNotExists = errors.New("customer doesn't exist")
 )
