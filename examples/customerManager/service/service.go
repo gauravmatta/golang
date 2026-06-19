@@ -1,15 +1,15 @@
-package controller
+package service
 
 import (
 	"customerManager/domain"
 	"fmt"
 )
 
-type CustomerController struct {
+type CustomerService struct {
 	Repository domain.CustomerRepository
 }
 
-func (cc CustomerController) Create(customer domain.Customer) error {
+func (cc CustomerService) Create(customer domain.Customer) error {
 	err := cc.Repository.Create(customer)
 	if err != nil {
 		return domain.ErrCustomerExists
@@ -18,7 +18,7 @@ func (cc CustomerController) Create(customer domain.Customer) error {
 	return nil
 }
 
-func (cc CustomerController) Update(id string, customer domain.Customer) error {
+func (cc CustomerService) Update(id string, customer domain.Customer) error {
 	err := cc.Repository.Update(id, customer)
 	if err != nil {
 		return domain.ErrCustomerNotExists
@@ -27,7 +27,7 @@ func (cc CustomerController) Update(id string, customer domain.Customer) error {
 	return nil
 }
 
-func (cc CustomerController) Delete(id string) error {
+func (cc CustomerService) Delete(id string) error {
 	err := cc.Repository.Delete(id)
 	if err != nil {
 		return domain.ErrCustomerNotExists
@@ -36,7 +36,7 @@ func (cc CustomerController) Delete(id string) error {
 	return nil
 }
 
-func (cc CustomerController) FindById(id string) (domain.Customer, error) {
+func (cc CustomerService) FindById(id string) (domain.Customer, error) {
 	customer, err := cc.Repository.FindById(id)
 	if err != nil {
 		return domain.Customer{}, domain.ErrCustomerNotExists
@@ -44,7 +44,7 @@ func (cc CustomerController) FindById(id string) (domain.Customer, error) {
 	return customer, nil
 }
 
-func (cc CustomerController) FindAll() ([]domain.Customer, error) {
+func (cc CustomerService) FindAll() ([]domain.Customer, error) {
 	customers, err := cc.Repository.FindAll()
 	if err != nil {
 		return []domain.Customer{}, domain.ErrNotFound

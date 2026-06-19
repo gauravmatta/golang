@@ -20,7 +20,7 @@ func main() {
 	router := initializeRoutes(h)
 	router = cors.Default().Handler(router)
 	server := &http.Server{
-		Addr:    ":8080",
+		Addr:    ":8081",
 		Handler: router,
 	}
 	log.Println("Listening...")

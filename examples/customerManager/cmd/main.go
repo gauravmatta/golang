@@ -1,14 +1,14 @@
 package main
 
 import (
-	"customerManager/controller"
 	"customerManager/domain"
 	"customerManager/memstore"
+	"customerManager/service"
 	"fmt"
 )
 
 func main() {
-	customerController := controller.CustomerController{
+	customerController := service.CustomerService{
 		Repository: memstore.NewCustomerRepository(),
 	}
 	customer1 := domain.Customer{
