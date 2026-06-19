@@ -33,9 +33,9 @@ func main() {
 func initializeRoutes(h *apphttp.CustomerHandler) http.Handler {
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /api/customers", h.FindAll)
-	//mux.HandleFunc("GET /api/customers/{id}", h.Get)
+	mux.HandleFunc("GET /api/customers/{id}", h.Get)
 	mux.HandleFunc("POST /api/customers", h.Post)
-	//mux.HandleFunc("PUT /api/customers/{id}", h.Put)
-	//mux.HandleFunc("DELETE /api/customers/{id}", h.Delete)
+	mux.HandleFunc("PATCH /api/customers/{id}", h.Patch)
+	mux.HandleFunc("DELETE /api/customers/{id}", h.Delete)
 	return mux
 }
