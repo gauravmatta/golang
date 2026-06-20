@@ -33,13 +33,19 @@ func middlewareSecond(next http.Handler) http.Handler {
 	})
 }
 
-func index(w http.ResponseWriter, r *http.Request) {
+func index(w http.ResponseWriter, _ *http.Request) {
 	log.Println("Executing index Handler")
-	fmt.Fprintf(w, "Welcome")
+	_, err := fmt.Fprintf(w, "Welcome")
+	if err != nil {
+		return
+	}
 }
-func message(w http.ResponseWriter, r *http.Request) {
+func message(w http.ResponseWriter, _ *http.Request) {
 	log.Println("Executing message Handler")
-	fmt.Fprintf(w, "HTTP Middleware is awesome")
+	_, err := fmt.Fprintf(w, "HTTP Middleware is awesome")
+	if err != nil {
+		return
+	}
 }
 
 func main() {
