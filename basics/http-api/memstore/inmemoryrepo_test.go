@@ -128,7 +128,7 @@ func TestCustomerRepository_GetAll(t *testing.T) {
 		{
 			name: "getting all Note",
 			want: []model.Note{
-				model.Note{
+				{
 					Title:       "slog",
 					Description: "slog is a logging package",
 				},
