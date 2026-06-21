@@ -116,7 +116,10 @@ func TestCustomerRepository_GetAll(t *testing.T) {
 		Title:       "slog",
 		Description: "slog is a logging package",
 	}
-	repository.Create(note)
+	_, err := repository.Create(note)
+	if err != nil {
+		return
+	}
 	tests := []struct {
 		name    string
 		want    []model.Note
