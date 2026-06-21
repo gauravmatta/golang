@@ -39,7 +39,7 @@ func TestNoteHandler_Post_Valid_Note(t *testing.T) {
 	uid, _ := uuid.NewV4()
 
 	mockRepository.EXPECT().Create(getMockNote()).Return(uid.String(), nil).Times(1)
-	noteJson := `{"title": "mux", "description": "Gorilla mux is a router library"}`
+	var noteJson = `{"title": "mux", "description": "Gorilla mux is a router library"}`
 	r.HandleFunc("POST /api/notes", handler.Post)
 	req, err := http.NewRequest(
 		"POST",
@@ -66,7 +66,7 @@ func TestNoteHandler_Post_Duplicate_Note_Title(t *testing.T) {
 	if err != nil {
 		return
 	}
-	noteJson := `{"title": "mux", "description": "Gorilla mux is a router library"}`
+	var noteJson = `{"title": "mux", "description": "Gorilla mux is a router library"}`
 	r.HandleFunc("POST /api/notes", handler.Post)
 	req, err := http.NewRequest(
 		"POST",
