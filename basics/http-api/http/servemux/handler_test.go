@@ -23,10 +23,6 @@ var (
 	w              *httptest.ResponseRecorder
 )
 
-func tearTown() {
-	mockRepository = nil
-}
-
 // setUp helper function set up before executing each unit tests
 func setUp(t *testing.T) {
 	r = http.NewServeMux()
@@ -136,11 +132,11 @@ func getMockNote() model.Note {
 
 func getMockNotes() []model.Note {
 	notes := []model.Note{
-		model.Note{
+		{
 			Title:       "mux",
 			Description: "Gorilla mux is a router library",
 		},
-		model.Note{
+		{
 			Title:       "zap",
 			Description: "Uber zap is a logging package",
 		},
