@@ -1,7 +1,9 @@
 package echo
 
 import (
+	"context"
 	"errors"
+	"log/slog"
 	"net/http"
 
 	"github.com/gauravmatta/golang/basics/http-api/model"
@@ -10,6 +12,7 @@ import (
 
 type NoteHandler struct {
 	Repository model.Repository
+	Logger     *slog.Logger
 }
 
 func (h *NoteHandler) Post(c echo.Context) error {
@@ -24,6 +27,7 @@ func (h *NoteHandler) Post(c echo.Context) error {
 		}
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
+	h.Logger.LogAttrs(context.Background(), slog.LevelInfo, "Note created", slog.String("note_id", note.NoteID))
 	return c.NoContent(http.StatusCreated)
 }
 
@@ -32,6 +36,7 @@ func (h *NoteHandler) GetAll(c echo.Context) error {
 		if errors.Is(err, model.ErrNotFound) {
 			return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 		}
+		h.Logger.LogAttrs(context.Background(), slog.LevelError, "Error fetching notes", slog.String("error", err.Error()))
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	} else {
 		return c.JSON(http.StatusOK, notes)

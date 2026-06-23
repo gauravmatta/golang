@@ -135,15 +135,28 @@ func withOldLogAPIs() {
 		Handler:  nil,
 		ErrorLog: logger,
 	}
-	server.ListenAndServe()
-	defer server.Close()
+	err := server.ListenAndServe()
+	if err != nil {
+		return
+	}
+	defer func(server *http.Server) {
+		err := server.Close()
+		if err != nil {
+			slog.LogAttrs(context.Background(), slog.LevelError, "Error closing server", slog.String("error", err.Error()))
+		}
+	}(&server)
 }
 
 // zapAsTheBackEnd demonstrates how to use Uber Zap as the backend for slog
 func zapAsTheBackEnd() {
 	zapLogger := zap.Must(zap.NewProduction())
 
-	defer zapLogger.Sync()
+	defer func(zapLogger *zap.Logger) {
+		err := zapLogger.Sync()
+		if err != nil {
+			slog.LogAttrs(context.Background(), slog.LevelError, "Error syncing zap logger", slog.String("error", err.Error()))
+		}
+	}(zapLogger)
 	// creating a slog frontend
 	logger := slog.New(zapslog.NewHandler(zapLogger.Core(), nil))
 
