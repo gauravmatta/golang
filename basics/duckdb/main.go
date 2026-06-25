@@ -1,0 +1,140 @@
+package main
+
+import (
+	"context"
+	"database/sql"
+	"log"
+	"time"
+
+	_ "github.com/marcboeker/go-duckdb"
+)
+
+var db *sql.DB
+var ctx = context.Background()
+
+type user struct {
+	name    string
+	age     int
+	height  float32
+	awesome bool
+	bday    time.Time
+}
+
+func main() {
+	var err error
+	db, err = sql.Open("duckdb", "./data/data.db?access_mode=READ_WRITE")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	check(db.Ping())
+
+	setting := db.QueryRowContext(ctx, "SELECT current_setting('access_mode')")
+	var am string
+	check(setting.Scan(&am))
+	log.Printf("DB opened with access mode %s", am)
+
+	check(db.ExecContext(ctx, "CREATE TABLE IF NOT EXISTS users(name VARCHAR, age INTEGER, height FLOAT, awesome BOOLEAN, bday DATE)"))
+	check(db.ExecContext(ctx, "INSERT INTO users VALUES('gaurav', 39, 1.91, true, '1986-04-04')"))
+	check(db.ExecContext(ctx, "INSERT INTO users VALUES('rahul', 40, 1.85, true, '1985-03-13')"))
+
+	rows, err := db.QueryContext(
+		ctx, `
+		SELECT name, age, height, awesome, bday
+		FROM users
+		WHERE (name = ? OR name = ?) AND age > ? AND awesome = ?`,
+		"gaurav", "rahul", 30, true,
+	)
+	check(err)
+	defer rows.Close()
+
+	for rows.Next() {
+		u := new(user)
+		err := rows.Scan(&u.name, &u.age, &u.height, &u.awesome, &u.bday)
+		if err != nil {
+			log.Fatal(err)
+		}
+		log.Printf(
+			"%s is %d years old, %.2f tall, bday on %s and has awesomeness: %t\n",
+			u.name, u.age, u.height, u.bday.Format(time.RFC3339), u.awesome,
+		)
+	}
+	check(rows.Err())
+
+	res, err := db.ExecContext(ctx, "DELETE FROM users")
+	check(err)
+
+	ra, _ := res.RowsAffected()
+	log.Printf("Deleted %d rows\n", ra)
+
+	runTransaction()
+	testPreparedStmt()
+}
+
+// check functions checks error value
+func check(args ...interface{}) {
+	err := args[len(args)-1]
+	if err != nil {
+		panic(err)
+	}
+}
+
+func runTransaction() {
+	log.Println("Starting transaction...")
+	tx, err := db.Begin()
+	check(err)
+
+	check(
+		tx.ExecContext(
+			ctx,
+			"INSERT INTO users VALUES('manu', 25, 1.35, false, '1996-04-03')",
+		),
+	)
+	row := tx.QueryRowContext(ctx, "SELECT COUNT(*) FROM users WHERE name = ?", "manu")
+	var count int64
+	check(row.Scan(&count))
+	if count > 0 {
+		log.Println("User Manu was inserted")
+	}
+
+	log.Println("Rolling back transaction...")
+	check(tx.Rollback())
+
+	row = db.QueryRowContext(ctx, "SELECT COUNT(*) FROM users WHERE name = ?", "manu")
+	check(row.Scan(&count))
+	if count > 0 {
+		log.Println("Found user manu")
+	} else {
+		log.Println("Couldn't find user manu")
+	}
+}
+
+func testPreparedStmt() {
+	stmt, err := db.PrepareContext(ctx, "INSERT INTO users VALUES(?, ?, ?, ?, ?)")
+	check(err)
+	defer stmt.Close()
+
+	check(stmt.ExecContext(ctx, "Kevin", 11, 0.55, true, "2013-07-06"))
+	check(stmt.ExecContext(ctx, "Bob", 12, 0.73, true, "2012-11-04"))
+	check(stmt.ExecContext(ctx, "Stuart", 13, 0.66, true, "2014-02-12"))
+
+	stmt, err = db.PrepareContext(ctx, "SELECT * FROM users WHERE age > ?")
+	check(err)
+
+	rows, err := stmt.QueryContext(ctx, 1)
+	check(err)
+	defer rows.Close()
+
+	for rows.Next() {
+		u := new(user)
+		err := rows.Scan(&u.name, &u.age, &u.height, &u.awesome, &u.bday)
+		if err != nil {
+			log.Fatal(err)
+		}
+		log.Printf(
+			"%s is %d years old, %.2f tall, bday on %s and has awesomeness: %t\n",
+			u.name, u.age, u.height, u.bday.Format(time.RFC3339), u.awesome,
+		)
+	}
+}
